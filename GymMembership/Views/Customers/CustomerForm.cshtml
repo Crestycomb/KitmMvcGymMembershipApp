@@ -1,0 +1,54 @@
+﻿@model GymMembership.ViewModels.CustomerFormViewModel
+@{
+    ViewBag.Title = Model.Title;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+        <h2>@Model.Title</h2>
+
+        @using (Html.BeginForm("Save", "Customers"))
+        {
+            @Html.ValidationSummary()
+            <div class="form-group">
+                @Html.LabelFor(m => m.Customer.Name)
+                @Html.TextBoxFor(m => m.Customer.Name, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Customer.Name)
+            </div>
+
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.Customer.MembershipTypeId)
+                @Html.DropDownListFor(m => m.Customer.MembershipTypeId, new SelectList(Model.MembershipTypes, "Id", "Name"), "Pasirinkite abonimento tipą", new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Customer.MembershipTypeId)
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.Customer.CustomerSinceDate)
+                @Html.TextBoxFor(m => m.Customer.CustomerSinceDate, "{0:d MMM yyyy}", new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.Customer.Birthdate)
+                @Html.TextBoxFor(m => m.Customer.Birthdate, "{0:d MMM yyyy}", new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.Customer.SingleTicketsBought)
+                @Html.TextBoxFor(m => m.Customer.SingleTicketsBought, new { @class = "form-control" })
+            </div>
+
+
+
+            <div class="checkbox">
+                @Html.CheckBoxFor(m => m.Customer.IsSubscribedToNewsletter, new { @class = "checkbox" }) Prenumerata naujienoms
+            </div>
+
+            @Html.HiddenFor(m => m.Customer.Id)
+
+            @*  Prevent CSRF attacks    *@
+            @Html.AntiForgeryToken()
+            <button type="submit" class="btn btn-primary">Išsaugoti</button>
+        }
+
+@*  enable client-side validation   *@
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+}

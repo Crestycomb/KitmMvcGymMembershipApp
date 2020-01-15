@@ -1,0 +1,59 @@
+﻿@model IEnumerable<GymMembership.Models.Customer>
+
+        <h2>Klientai</h2>
+        <p>
+            @Html.ActionLink("Prideti klienta", "New", "Customers", null, new { @class = "btn btn-primary" })
+        </p>
+        @if (!Model.Any())
+        {
+            <p>Neturime klientų</p>
+        }
+        else
+        {
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>Vardas</th>
+                        <th>Abonemento tipas</th>
+                        <th>Pajamos</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{ double totalSales = 0;}
+                    @foreach (var customer in Model)
+                    {
+                        <tr>
+                            <td>@Html.ActionLink(customer.Name, "Edit", "Customers", new { id = customer.Id }, null)</td>
+                            <td>@customer.MembershipType.Name</td>
+                            @{
+                                double sales;
+                                if (customer.SingleTicketsBought.HasValue)
+                                {
+                                    sales = (double)customer.SingleTicketsBought * 3;
+                                }
+                                else { 
+                                   sales = 0;
+                                }
+
+                                double daysSinceCustomer = (DateTime.Today - customer.CustomerSinceDate).TotalDays;
+
+                                if (customer.MembershipTypeId > 1)
+                                {
+                                    sales += daysSinceCustomer * customer.MembershipType.MonthlyFee / 30;
+                                }
+
+                                totalSales += sales;
+                            }
+                            <td>@Math.Truncate(sales)€</td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td class="text-success">@Math.Truncate(totalSales)€</td>
+                    </tr>
+                </tfoot>
+            </table>
+        }
