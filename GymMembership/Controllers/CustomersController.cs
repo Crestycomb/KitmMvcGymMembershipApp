@@ -25,14 +25,12 @@ namespace GymMembership.Controllers
             _context.Dispose();
         }
 
-
         public ViewResult Index()
         {
             var customers = _context.Customers.Include(c => c.MembershipType).ToList();
 
             return View(customers);
         }
-
 
         public ActionResult New()
         {
@@ -62,7 +60,6 @@ namespace GymMembership.Controllers
             return View("CustomerForm", viewModel);
         }
 
-
         public ActionResult Details(int id)
         {
             var customer = _context.Customers.Include(c => c.MembershipType).SingleOrDefault(c => c.Id == id);
@@ -90,7 +87,6 @@ namespace GymMembership.Controllers
 
             if (customer.Id == 0)
             {
-                customer.CustomerSinceDate = DateTime.Now;
                 _context.Customers.Add(customer);
             }
 
@@ -111,6 +107,31 @@ namespace GymMembership.Controllers
             _context.SaveChanges();
 
             return RedirectToAction("Index", "Customers");
+        }
+
+        public ActionResult Delete(int id)
+        {
+            var customer = _context.Customers.Find(id);
+            if (customer == null)
+                return HttpNotFound();
+
+            return View(customer);
+        }
+
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int id)
+        {
+            var customer = _context.Customers.Find(id);
+
+            if (customer == null)
+                return HttpNotFound();
+
+            _context.Customers.Remove(customer);
+            _context.SaveChanges();
+
+            return RedirectToAction("Index");
         }
     }
 }

@@ -1,0 +1,49 @@
+﻿@model GymMembership.Models.Customer
+
+@{
+    ViewBag.Title = "Trinti";
+}
+
+<h2>Trinti</h2>
+
+<h3>Ar tikrai norite ištrinti šį klientą?</h3>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Birthdate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Birthdate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CustomerSinceDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CustomerSinceDate)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Patvirtinti" class="btn btn-default" /> |
+            @Html.ActionLink("Atgal", "Index")
+        </div>
+    }
+</div>

@@ -16,36 +16,40 @@
                         <th>Vardas</th>
                         <th>Abonemento tipas</th>
                         <th>Pajamos</th>
+                        <th>Ištrinti klientą</th>
                     </tr>
                 </thead>
                 <tbody>
                     @{ double totalSales = 0;}
                     @foreach (var customer in Model)
                     {
-                        <tr>
-                            <td>@Html.ActionLink(customer.Name, "Edit", "Customers", new { id = customer.Id }, null)</td>
-                            <td>@customer.MembershipType.Name</td>
-                            @{
-                                double sales;
-                                if (customer.SingleTicketsBought.HasValue)
-                                {
-                                    sales = (double)customer.SingleTicketsBought * 3;
-                                }
-                                else { 
-                                   sales = 0;
-                                }
-
-                                double daysSinceCustomer = (DateTime.Today - customer.CustomerSinceDate).TotalDays;
-
-                                if (customer.MembershipTypeId > 1)
-                                {
-                                    sales += daysSinceCustomer * customer.MembershipType.MonthlyFee / 30;
-                                }
-
-                                totalSales += sales;
+                    <tr>
+                        <td>@Html.ActionLink(customer.Name, "Edit", "Customers", new { id = customer.Id }, null)</td>
+                        <td>@customer.MembershipType.Name</td>
+                        @{
+                            double sales;
+                            if (customer.SingleTicketsBought.HasValue)
+                            {
+                                sales = (double)customer.SingleTicketsBought * 3;
                             }
+                            else
+                            {
+                                sales = 0;
+                            }
+
+                            double daysSinceCustomer = (DateTime.Today - customer.CustomerSinceDate).TotalDays;
+
+                            if (customer.MembershipTypeId > 1)
+                            {
+                                sales += daysSinceCustomer * customer.MembershipType.MonthlyFee / 30;
+                            }
+
+                            totalSales += sales;
+
                             <td>@Math.Truncate(sales)€</td>
-                        </tr>
+                            <td><button class="btn btn-primary text-muted">@Html.ActionLink("Trinti", "Delete", "Customers", new { id = customer.Id }, null)</button></td>
+                        }
+                    </tr>
                     }
                 </tbody>
                 <tfoot>
@@ -53,6 +57,7 @@
                         <td></td>
                         <td></td>
                         <td class="text-success">@Math.Truncate(totalSales)€</td>
+                        <td></td>
                     </tr>
                 </tfoot>
             </table>

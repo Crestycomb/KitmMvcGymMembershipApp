@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
+using GymMembership.Validators;
 
 namespace GymMembership.Models
 {
@@ -24,6 +25,7 @@ namespace GymMembership.Models
         [Display(Name = "Abonemento tipas")]
         public byte MembershipTypeId { get; set; }
 
+        [DateValidatorBirth]
         [Display(Name = "Gimimo data")]
         public DateTime? Birthdate { get; set; }
 
